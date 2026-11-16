@@ -1,0 +1,28 @@
+{
+  "version": 8,
+  "name": "Canarias Suena",
+  "center": [-15.6, 28.3],
+  "zoom": 6.8,
+  "glyphs": "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf",
+  "sources": {
+    "openmaptiles": { "type": "vector", "url": "https://tiles.openfreemap.org/planet" },
+    "artists": { "type": "geojson", "data": { "type": "FeatureCollection", "features": [] } }
+  },
+  "layers": [
+    { "id": "land", "type": "background", "paint": { "background-color": "#FFFFFF" } },
+    { "id": "water", "type": "fill", "source": "openmaptiles", "source-layer": "water",
+      "paint": { "fill-color": "#BBD7F2" } },
+    { "id": "landuse", "type": "fill", "source": "openmaptiles", "source-layer": "landcover",
+      "paint": { "fill-color": "#EAF2FB", "fill-opacity": 0.6 } },
+    { "id": "coastline", "type": "line", "source": "openmaptiles", "source-layer": "water",
+      "paint": { "line-color": "#1E5FA8", "line-width": 1.2, "line-opacity": 0.6 } },
+    { "id": "roads", "type": "line", "source": "openmaptiles", "source-layer": "transportation",
+      "minzoom": 9, "paint": { "line-color": "#DCEBFA", "line-width": 1 } },
+    { "id": "places", "type": "symbol", "source": "openmaptiles", "source-layer": "place",
+      "filter": ["in", ["get", "class"], ["literal", ["island", "city", "town"]]],
+      "layout": { "text-field": ["coalesce", ["get", "name:es"], ["get", "name"]], "text-font": ["Noto Sans Regular"], "text-size": 13 },
+      "paint": { "text-color": "#0B2545", "text-halo-color": "#FFFFFF", "text-halo-width": 1.5 } },
+    { "id": "artists", "type": "circle", "source": "artists",
+      "paint": { "circle-color": "#1E5FA8", "circle-radius": 7, "circle-stroke-color": "#FFFFFF", "circle-stroke-width": 2 } }
+  ]
+}
