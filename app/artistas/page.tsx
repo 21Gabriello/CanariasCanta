@@ -17,6 +17,8 @@ export default function ArtistasPage() {
               <div className="artist-body">
                 <strong>{a.name}</strong>
                 <span>{a.genre} · {islandName(a.island)}</span>
+                <span className="artist-city">{a.city} · {a.since}</span>
+                <p>{a.bio}</p>
               </div>
             </article>
           ))}

@@ -13,8 +13,7 @@ const links = [
 export default function Nav() {
   const path = usePathname();
   return (
-    // On the home page the nav floats over the hero; elsewhere it is a solid bar.
-    <nav className={path === '/' ? 'nav nav-over' : 'nav'} aria-label="Principal">
+    <nav className="nav" aria-label="Principal">
       <Link href="/" className="logo">canarias<span>suena</span></Link>
       <div className="nav-links">
         {links.map((l) => (

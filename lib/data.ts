@@ -1,7 +1,8 @@
 // shortcut: static sample data, move to Supabase tables (islands, artists, songs, events, words) when the DB is ready.
 
 export type Island = { id: string; nombre: string; provincia: string; center: [number, number] };
-export type Artist = { name: string; genre: string; island: string };
+// city: where the artist was born / the group was founded. coords: [lng, lat] of that city.
+export type Artist = { name: string; genre: string; island: string; city: string; since: string; bio: string; coords: [number, number] };
 
 export const islands: Island[] = [
   { id: 'elhierro', nombre: 'El Hierro', provincia: 'Santa Cruz de Tenerife', center: [-18.0, 27.74] },
@@ -14,13 +15,20 @@ export const islands: Island[] = [
 ];
 
 export const artists: Artist[] = [
-  { name: 'Los Sabandeños', genre: 'Folklore', island: 'tenerife' },
-  { name: 'Pedro Guerra', genre: 'Cantautor', island: 'tenerife' },
-  { name: 'Los Gofiones', genre: 'Folklore', island: 'grancanaria' },
-  { name: 'Efecto Pasillo', genre: 'Pop', island: 'grancanaria' },
-  { name: 'Taburiente', genre: 'Folk rock', island: 'lapalma' },
-  { name: 'Rosana', genre: 'Pop', island: 'lanzarote' },
-  { name: 'Benito Cabrera', genre: 'Timple · Autor', island: 'lanzarote' },
+  { name: 'Los Sabandeños', genre: 'Folklore', island: 'tenerife', city: 'San Cristóbal de La Laguna', since: 'Fundado en 1966', coords: [-16.316, 28.488],
+    bio: 'Grupo nacido entre amigos de la Universidad de La Laguna para conservar y difundir la música popular canaria. Lo fundó, entre otros, Elfidio Alonso.' },
+  { name: 'Pedro Guerra', genre: 'Cantautor', island: 'tenerife', city: 'Güímar', since: 'Nacido en 1966', coords: [-16.41, 28.315],
+    bio: 'Estudió guitarra en el Conservatorio de Tenerife y empezó tocando en fiestas populares. En 1993 se instaló en Madrid para su carrera en solitario.' },
+  { name: 'Los Gofiones', genre: 'Folklore', island: 'grancanaria', city: 'Las Palmas de Gran Canaria', since: 'Fundado en 1968', coords: [-15.43, 28.12],
+    bio: 'Agrupación de música popular canaria creada a iniciativa del timplista Totoyo Millares. Reúne a unos cuarenta cantantes e instrumentistas.' },
+  { name: 'Efecto Pasillo', genre: 'Pop', island: 'grancanaria', city: 'Gran Canaria (ciudad por confirmar)', since: 'Fundado en 2007', coords: [-15.6, 27.96],
+    bio: 'Grupo de pop formado por cuatro amigos: Iván Torres, Javier Moreno, Nau Barreto y Arturo Sosa. El nombre homenajea el pasillo de su local de ensayo.' },
+  { name: 'Taburiente', genre: 'Folk · Nueva Canción Canaria', island: 'lapalma', city: 'Santa Cruz de La Palma', since: 'Mediados de los años 70', coords: [-17.765, 28.683],
+    bio: 'Fundado por Luis Morera, Miguel Pérez y Manolo Pérez. Su nombre viene de la Caldera de Taburiente, en el corazón de La Palma.' },
+  { name: 'Rosana', genre: 'Pop', island: 'lanzarote', city: 'Arrecife', since: 'Nacida en 1963', coords: [-13.55, 28.963],
+    bio: 'Rosana Arbelo empezó como compositora y triunfó como cantante en 1996. En 2022 fue la primera mujer nombrada Hija Predilecta de Arrecife.' },
+  { name: 'Benito Cabrera', genre: 'Timple · Autor', island: 'lanzarote', city: 'Lanzarote (lugar de nacimiento por confirmar)', since: 'Nacido en 1963', coords: [-13.56, 29.06],
+    bio: 'Timplista y folclorista, director musical de Los Sabandeños de 2007 a 2020. Dirige la Casa-Museo del Timple en Teguise.' },
 ];
 
 export const levels = ['A2', 'B1', 'B2', 'C1'] as const;
