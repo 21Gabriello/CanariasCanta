@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import type { Map as MLMap, MapLayerMouseEvent, StyleSpecification } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import baseStyle from '@/lib/map-style.json';
@@ -34,6 +35,8 @@ function popupContent(a: Artist) {
 
 export default function MapSection() {
   const [sel, setSel] = useState<string | null>(null);
+  const [picked, setPicked] = useState<number | null>(null);
+  const art = picked === null ? null : artists[picked];
   const box = useRef<HTMLDivElement>(null);
   const map = useRef<MLMap | null>(null);
 
@@ -55,7 +58,12 @@ export default function MapSection() {
         popup.setLngLat(a.coords).setDOMContent(popupContent(a)).addTo(m);
       };
       m.on('mouseenter', 'artists', show);
-      m.on('click', 'artists', show); // touch screens have no hover
+      m.on('click', 'artists', (e) => {
+        const i = e.features?.[0]?.properties.i;
+        if (i === undefined) return;
+        popup.remove();
+        setPicked(Number(i));
+      });
       m.on('mouseleave', 'artists', () => {
         m.getCanvas().style.cursor = '';
         popup.remove();
@@ -85,7 +93,7 @@ export default function MapSection() {
       <div ref={box} className="map-full" role="region" aria-label="Mapa de las Islas Canarias. Pasa el ratón sobre un punto para ver el artista." />
       <div className="card map-intro">
         <h1>Canarias Suena</h1>
-        <p>Siete islas, un acento y mucha música. Pasa el ratón por los puntos del mapa para conocer a cada artista y su ciudad.</p>
+        <p>Siete islas, un acento y mucha música. Pasa el ratón por los puntos del mapa para conocer a cada artista y pulsa para ver su ficha.</p>
         <Link href="/artistas" className="btn map-cta">Ver todos los artistas</Link>
       </div>
       <div className="map-chips" role="group" aria-label="Islas">
@@ -94,6 +102,23 @@ export default function MapSection() {
           <button key={i.id} className="chip" aria-pressed={i.id === sel} onClick={() => pick(i.id)}>{i.nombre}</button>
         ))}
       </div>
+      {art && (
+        <aside className="card map-panel" aria-label={`Ficha de ${art.name}`} onKeyDown={(e) => e.key === 'Escape' && setPicked(null)}>
+          <button className="panel-close" aria-label="Cerrar ficha" onClick={() => setPicked(null)} autoFocus>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+          </button>
+          <div className="panel-photo">
+            <Image src={art.photo} alt={art.name} fill sizes="380px" style={{ objectFit: 'cover', objectPosition: art.focus }} />
+          </div>
+          <div className="panel-body">
+            <p className="eyebrow">{art.genre} · {islandName(art.island)}</p>
+            <h2>{art.name}</h2>
+            <p className="pop-city">{art.city} · {art.since}</p>
+            <p className="pop-bio">{art.bio}</p>
+            <Link href={`/artistas/${art.slug}`} className="btn map-cta">Ver ficha completa</Link>
+          </div>
+        </aside>
+      )}
     </section>
   );
 }

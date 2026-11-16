@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
-import { artists, initials, islandName } from '@/lib/data';
+import Link from 'next/link';
+import Image from 'next/image';
+import { artists, islandName } from '@/lib/data';
 
 export const metadata: Metadata = { title: 'Artistas' };
 
@@ -12,18 +14,18 @@ export default function ArtistasPage() {
         <p className="lead">Del folklore a la música urbana: voces de todas las islas y de varias épocas.</p>
         <div className="grid">
           {artists.map((a) => (
-            <article key={a.name} className="card artist">
-              <div className="artist-top" aria-hidden="true">{initials(a.name)}</div>
+            <Link key={a.slug} href={`/artistas/${a.slug}`} className="card artist">
+              <div className="artist-photo">
+                <Image src={a.photo} alt={a.name} fill sizes="(max-width: 640px) 100vw, 360px" style={{ objectFit: 'cover', objectPosition: a.focus }} />
+              </div>
               <div className="artist-body">
                 <strong>{a.name}</strong>
                 <span>{a.genre} · {islandName(a.island)}</span>
-                <span className="artist-city">{a.city} · {a.since}</span>
-                <p>{a.bio}</p>
+                <span className="artist-city">{a.city}</span>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
-        <p className="note">Fotos y biografías: pendientes de cada artista.</p>
       </div>
     </section>
   );
