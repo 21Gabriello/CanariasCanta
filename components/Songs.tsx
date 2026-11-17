@@ -30,7 +30,6 @@ export default function Songs() {
             </li>
           ))}
         </ul>
-        <p className="note">Títulos de ejemplo. Se sustituirán por el corpus real.</p>
       </div>
     </section>
   );

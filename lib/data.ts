@@ -30,16 +30,28 @@ export const artists: Artist[] = [
     bio: 'Rosana Arbelo empezó como compositora y triunfó como cantante en 1996. En 2022 fue la primera mujer nombrada Hija Predilecta de Arrecife.' },
   { slug: 'benito-cabrera', photo: '/artists/benito-cabrera.png', focus: '55% 35%', name: 'Benito Cabrera', genre: 'Timple · Autor', island: 'lanzarote', city: 'Lanzarote (lugar de nacimiento por confirmar)', since: 'Nacido en 1963', coords: [-13.56, 29.06],
     bio: 'Timplista y folclorista, director musical de Los Sabandeños de 2007 a 2020. Dirige la Casa-Museo del Timple en Teguise.' },
+  { slug: 'quevedo', photo: '/artists/quevedo.png', focus: '50% 30%', name: 'Quevedo', genre: 'Urbano', island: 'grancanaria', city: 'Nacido en Madrid, criado en Gran Canaria', since: 'Nacido en 2001', coords: [-15.52, 28.08],
+    bio: 'Pedro Domínguez Quevedo pasó su infancia en Gran Canaria, de donde es su familia. Saltó a la fama con «Quédate» junto a Bizarrap y su verano de 2023 fue de «Columbia», creada en Lanzarote.' },
+  { slug: 'cruz-cafune', photo: '/artists/cruz-cafune.png', focus: '50% 45%', name: 'Cruz Cafuné', genre: 'Urbano · Rap', island: 'tenerife', city: 'Tacoronte (por confirmar)', since: 'Nacido en 1993', coords: [-16.41, 28.477],
+    bio: 'Carlos Bruñas Zamorín empezó en el grupo BNMP antes de su carrera en solitario. Sus discos incluyen «Moonlight922» y «Me muevo con Dios», con un rap muy marcado por el habla canaria.' },
+  { slug: 'lucho-rk', photo: '/artists/lucho-rk.png', focus: '50% 35%', name: 'Lucho RK', genre: 'Urbano', island: 'grancanaria', city: 'Las Palmas de Gran Canaria', since: 'Nacido en 2000', coords: [-15.45, 28.1],
+    bio: 'Emilio Roca Cáceres despuntó en 2022 y su primer disco, «SORDO DE UN PIE», mezcla reguetón, afrobeat, bolero y electrónica. Ha colaborado con Quevedo y Cruz Cafuné.' },
 ];
 
 export const levels = ['A2', 'B1', 'B2', 'C1'] as const;
 
 export const songs = [
-  { title: '[Título 01]', artist: 'Los Sabandeños', genre: 'Folklore', level: 'A2' },
-  { title: '[Título 02]', artist: 'Los Gofiones', genre: 'Folklore', level: 'B1' },
-  { title: '[Título 03]', artist: 'Pedro Guerra', genre: 'Cantautor', level: 'B2' },
-  { title: '[Título 04]', artist: 'Efecto Pasillo', genre: 'Pop', level: 'B1' },
-  { title: '[Título 05]', artist: 'Rosana', genre: 'Pop', level: 'C1' },
+  // One representative song per artist. Levels are a teaching estimate, review with ELE criteria.
+  { title: 'Sombra del Nublo', artist: 'Los Sabandeños', genre: 'Folklore', level: 'B1' },
+  { title: 'Contamíname', artist: 'Pedro Guerra', genre: 'Cantautor', level: 'B1' },
+  { title: 'Gran Canaria', artist: 'Los Gofiones', genre: 'Folklore', level: 'A2' },
+  { title: 'Pan y mantequilla', artist: 'Efecto Pasillo', genre: 'Pop', level: 'A2' },
+  { title: 'Ach Guañac', artist: 'Taburiente', genre: 'Folk', level: 'C1' },
+  { title: 'Llegaremos a tiempo', artist: 'Rosana', genre: 'Pop', level: 'B1' },
+  { title: 'Nube de hielo', artist: 'Benito Cabrera', genre: 'Timple · Autor', level: 'B2' },
+  { title: 'Columbia', artist: 'Quevedo', genre: 'Urbano', level: 'B1' },
+  { title: 'Contando lunares (con Don Patricio)', artist: 'Cruz Cafuné', genre: 'Urbano', level: 'C1' },
+  { title: 'Guaya (con Quevedo)', artist: 'Lucho RK', genre: 'Urbano', level: 'B2' },
 ];
 
 export const events = [

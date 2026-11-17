@@ -35,10 +35,23 @@ function popupContent(a: Artist) {
 
 export default function MapSection() {
   const [sel, setSel] = useState<string | null>(null);
+  // The panel keeps showing the last artist while it slides out, so `open` and `picked` are separate.
   const [picked, setPicked] = useState<number | null>(null);
+  const [open, setOpen] = useState(false);
   const art = picked === null ? null : artists[picked];
   const box = useRef<HTMLDivElement>(null);
   const map = useRef<MLMap | null>(null);
+  const closeBtn = useRef<HTMLButtonElement>(null);
+  // 'auto' lets CSS decide (open on desktop, closed on phones) so the first paint never flashes.
+  const [side, setSide] = useState<'auto' | 'open' | 'closed'>('auto');
+  const [wide, setWide] = useState(true);
+  useEffect(() => setWide(matchMedia('(min-width: 641px)').matches), []);
+  const sideOpen = side === 'auto' ? wide : side === 'open';
+  const toggleSide = () => setSide(sideOpen ? 'closed' : 'open');
+
+  useEffect(() => {
+    if (open) closeBtn.current?.focus({ preventScroll: true });
+  }, [open, picked]);
 
   useEffect(() => {
     let cancelled = false;
@@ -63,6 +76,7 @@ export default function MapSection() {
         if (i === undefined) return;
         popup.remove();
         setPicked(Number(i));
+        setOpen(true);
       });
       m.on('mouseleave', 'artists', () => {
         m.getCanvas().style.cursor = '';
@@ -83,6 +97,14 @@ export default function MapSection() {
     map.current?.flyTo({ center: isl.center, zoom: 8.6 });
   };
 
+  // List entry: same result as clicking the pin, and the keyboard route to every artist.
+  const showArtist = (i: number) => {
+    setPicked(i);
+    setOpen(true);
+    map.current?.flyTo({ center: artists[i].coords, zoom: 9 });
+    if (!wide) setSide('closed'); // on phones the list covers the map, so get it out of the way
+  };
+
   const reset = () => {
     setSel(null);
     map.current?.fitBounds([[-18.2, 27.6], [-13.3, 29.3]], { padding: 40 });
@@ -91,11 +113,28 @@ export default function MapSection() {
   return (
     <section className="home" aria-label="Mapa de artistas">
       <div ref={box} className="map-full" role="region" aria-label="Mapa de las Islas Canarias. Pasa el ratón sobre un punto para ver el artista." />
-      <div className="card map-intro">
-        <h1>Canarias Suena</h1>
-        <p>Siete islas, un acento y mucha música. Pasa el ratón por los puntos del mapa para conocer a cada artista y pulsa para ver su ficha.</p>
-        <Link href="/artistas" className="btn map-cta">Ver todos los artistas</Link>
-      </div>
+      <aside className="card map-side" data-side={side} inert={!sideOpen} aria-label="Artistas en el mapa" id="map-side">
+        <div className="map-side-head">
+          <h1>Canarias Suena</h1>
+          <p>Siete islas, un acento y mucha música. Pasa el ratón por los puntos del mapa o elige un artista de la lista.</p>
+          <Link href="/artistas" className="btn map-cta">Ver todos los artistas</Link>
+        </div>
+        <h2 className="map-side-title">Artistas <span>({artists.length})</span></h2>
+        <ul className="map-list">
+          {artists.map((a, i) => (
+            <li key={a.slug}>
+              <button onClick={() => showArtist(i)} aria-current={open && picked === i ? 'true' : undefined}>
+                <strong>{a.name}</strong>
+                <small>{a.genre} · {islandName(a.island)}</small>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </aside>
+      <button className="side-toggle" data-side={side} onClick={toggleSide} aria-controls="map-side" aria-expanded={sideOpen} aria-label={sideOpen ? 'Ocultar lista de artistas' : 'Mostrar lista de artistas'}>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M15 6l-6 6 6 6" /></svg>
+        <span>Artistas</span>
+      </button>
       <div className="map-chips" role="group" aria-label="Islas">
         <button className="chip" aria-pressed={sel === null} onClick={reset}>Todas</button>
         {islands.map((i) => (
@@ -103,8 +142,8 @@ export default function MapSection() {
         ))}
       </div>
       {art && (
-        <aside className="card map-panel" aria-label={`Ficha de ${art.name}`} onKeyDown={(e) => e.key === 'Escape' && setPicked(null)}>
-          <button className="panel-close" aria-label="Cerrar ficha" onClick={() => setPicked(null)} autoFocus>
+        <aside className="card map-panel" data-open={open} inert={!open} aria-label={`Ficha de ${art.name}`} onKeyDown={(e) => e.key === 'Escape' && setOpen(false)}>
+          <button ref={closeBtn} className="panel-close" aria-label="Cerrar ficha" onClick={() => setOpen(false)}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
           </button>
           <div className="panel-photo">

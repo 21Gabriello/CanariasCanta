@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { artists, events, islandName } from '@/lib/data';
+import { artists, events, songs, islandName } from '@/lib/data';
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -21,6 +21,7 @@ export default async function ArtistPage({ params }: Props) {
   if (!a) notFound();
   // shortcut: events matched by artist name in the title, link by artist id once events live in Supabase.
   const own = events.filter((e) => e.title.includes(a.name));
+  const ownSongs = songs.filter((s) => s.artist === a.name);
 
   return (
     <section className="section">
@@ -40,6 +41,16 @@ export default async function ArtistPage({ params }: Props) {
               <div><dt>Género</dt><dd>{a.genre}</dd></div>
             </dl>
             <p style={{ lineHeight: 1.7, fontSize: 18 }}>{a.bio}</p>
+            {ownSongs.length > 0 && (
+              <>
+                <h2 style={{ fontSize: 22, margin: '32px 0 12px' }}>Para trabajar en clase</h2>
+                <ul className="list">
+                  {ownSongs.map((s) => (
+                    <li key={s.title}><Link href="/canciones" className="song-link">{s.title}</Link> · nivel {s.level}</li>
+                  ))}
+                </ul>
+              </>
+            )}
             {own.length > 0 && (
               <>
                 <h2 style={{ fontSize: 22, margin: '32px 0 12px' }}>Próximos eventos</h2>
